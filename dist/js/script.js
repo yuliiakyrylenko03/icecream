@@ -1,4 +1,5 @@
 const getElem = (elem)=> document.querySelector(elem);
+
 window.addEventListener('scroll', ()=>{
     if(window.pageYOffset >= 15 && !(getElem('.header').classList.contains('active'))){
         getElem('.header').classList.add('hidden');
@@ -226,7 +227,153 @@ document.querySelectorAll('.promo__count-container p').forEach((el)=>{
           }
         }
       });
+///////////////////////////////////////VALIDATE FORM///////////////
+const forms = document.querySelectorAll('.feed-form');
+let iti1 = window.intlTelInput(getElem("#phone_0"), {
+    initialCountry: "ua",
+    utilsScript: "js/utils.js"
+});
+let iti2 = window.intlTelInput(getElem("#phone_1"), {
+    initialCountry: "ua",
+    utilsScript: "js/utils.js"
+});
+let iti3 = window.intlTelInput(getElem("#phone_2"), {
+    initialCountry: "ua",
+    utilsScript: "js/utils.js"
+});
 
+
+forms.forEach((form, i)=>{
+    form.addEventListener('submit', e => {
+        const username = e.target.name;
+        const text = e.target.text;
+        const phone = e.target.phone;
+
+
+        let valid;
+        if(e.target.dataset.id == 0){
+            valid = iti1.isValidNumber();
+        } if(e.target.dataset.id == 1){
+            valid = iti2.isValidNumber();
+        } if(e.target.dataset.id == 2){
+            valid = iti3.isValidNumber();
+        };
+
+        let email = e.target.email;
+            if(!e.target.email){
+                email = '';
+            }
+        e.preventDefault();
+        validateInputs(e.target,username, text, email, phone, valid);
+
+      });
+});
+
+const setError = (element, message) => {
+  const inputControl = element.closest('.input__wrapper');
+  const errorDisplay = inputControl.querySelector('.error');
+
+  errorDisplay.innerText = message;
+  inputControl.classList.add('error');
+  inputControl.classList.remove('success');
+};
+
+const setSuccess = element => {
+  const inputControl = element.closest('.input__wrapper');
+  const errorDisplay = inputControl.querySelector('.error');
+
+  errorDisplay.innerText = '';
+  inputControl.classList.add('success');
+  inputControl.classList.remove('error');
+};
+
+const isValidEmail = email => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+};
+
+const validateInputs = (form,name, text, email,tel, validPhone) => { 
+  const usernameValue = name.value.trim();
+  if(usernameValue === '') {
+      setError(name, 'Username is required');
+  } else {
+      setSuccess(name);
+  }
+
+if(email){
+    const emailValue = email.value.trim();
+
+    if(emailValue === '') {
+      setError(email, 'Email is required');
+    } else if (!isValidEmail(emailValue)) {
+      setError(email, 'Provide a valid email address');
+    } else {
+      setSuccess(email);
+    }
+}
+
+    
+    const telValue = tel.value;
+    if(telValue === '') {
+      setError(tel, 'Phone number is required');
+    } else if (!validPhone) {
+      setError(tel, 'Provide a valid phone number');
+    } else {
+      setSuccess(tel);
+    }
+
+
+  const textValue = text.value.trim();
+  if(textValue === ''){
+    setError(text, 'Please write your message here');
+  } else{
+    setSuccess(text);
+  }
+
+  function finishSendForm(){
+    let prom = new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+            form.reset();
+            form.button.classList.add('active');
+            form.button.firstElementChild.innerHTML = "Thanks";  
+            resolve(); 
+        },1000);
+      });
+      prom.then(()=>{
+        setTimeout(()=>{
+            form.button.classList.remove('active');
+            form.button.firstElementChild.innerHTML = "Submit"; 
+            document.querySelectorAll('.overlay').forEach((el)=>{
+                if(el.classList.contains('active')){
+                    el.classList.remove('active');
+                }
+            });
+            if(getElem('.sidepage').classList.contains('active')){
+                getElem('.sidepage').classList.remove('active');
+            }
+            form.parentNode.classList.remove('active');
+            getElem('body').style.overflow = '';
+        },5000);
+      });
+  }
+
+  if(email){
+    if(isValidEmail && validPhone && textValue !== '' &&  usernameValue !== ''){
+        finishSendForm();
+    } 
+  }else{
+    if(validPhone && textValue !== '' &&  usernameValue !== ''){
+        finishSendForm();
+    }  
+  }
+
+};
+
+
+
+
+
+  
 
       
 
