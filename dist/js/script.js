@@ -35,10 +35,11 @@ let swiper = new Swiper(".mySwiper", {
     },
   });
 
-  let time = 2,
-  cc = 1;
+
  ////////////////////////////////////////////END SLIDER//////////////////////////////////////
  ///////////////////////////////////////////PROMO COUNT///////////////////////////////////// 
+let time = 2;
+
 document.querySelectorAll('.promo__count-container p').forEach((el)=>{
     let i = 1,
     num = el.dataset.num,
@@ -53,37 +54,7 @@ document.querySelectorAll('.promo__count-container p').forEach((el)=>{
     }, step);
 });
 //////////////////////////////////////////////END PROMO COUNT////////////////////////////////
-// (function($) {
-//     ////TABS///
-//     ///MODAL///
-//     $('[data-modal=promo]').on('click', function() {
-//         $('.overlay, #promo').fadeIn('slow');
-//     });
-//     $('[data-modal=video]').on('click', function() {
-//         $('.overlay, #video').fadeIn('slow');
-//     });
-//     $('[data-modal=map]').on('click', function() {
-//         $('.overlay, #map').fadeIn('slow');
-//     });
-//     $('[data-modal=franchise]').on('click', function() {
-//         $('.overlay, #franchise').fadeIn('slow');
-//     });
-    
-//     $('.modal__close').on('click', function() {
-//         $('.overlay,#promo, #products, #video,#map,#franchise').fadeOut('slow');
-//     });
-
-//     $('.button_mini').each(function(i) {
-//         $(this).on('click', function() {
-//             $('#order .modal__descr').text($('.catalog-item__subtitle').eq(i).text());
-//             $('.overlay, #order').fadeIn('slow');
-//         });
-//     });
-//     ///END MODAL///
-//     })(jQuery);
-
-
-    /////////
+//////////////////////////////////////////////PRODUCT CARDS//////////////////////////////////
 
     class Product {
         constructor(name, src, color, components, definitions, ingredients, quantity, parentSelector) {
